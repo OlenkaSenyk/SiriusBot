@@ -1,19 +1,19 @@
 import { createBtn } from "./dynamic.js";
-
+import { emojis_obj } from "./emojis.js";
 export const home_inline_keyboard = [
   [
     {
-      text: "Є улюбленець \u{2705}",
+      text: "Є улюбленець "+emojis_obj.withPet,
       callback_data: "withPetBtn",
     },
     {
-      text: "Нема улюбленця \u{274C}",
+      text: "Нема улюбленця "+emojis_obj.withoutPet,
       callback_data: "withoutPetBtn",
     },
   ],
   [
     {
-      text: "Донати \u{1F4B0}",
+      text: "Донати "+emojis_obj.donate,
       callback_data: "donateBtn",
     },
   ],
@@ -22,19 +22,19 @@ export const home_inline_keyboard = [
 export const pet_inline_keyboard = [
   [
     {
-      text: "Песики \u{1F436}",
+      text: "Песики "+emojis_obj.dog,
       callback_data: "dogsBtn",
     },
   ],
   [
     {
-      text: "Котики \u{1F431}",
+      text: "Котики "+emojis_obj.cat,
       callback_data: "catsBtn",
     },
   ],
   [
     {
-      text: "На головну \u{1F3E0}",
+      text: "На головну "+emojis_obj.home,
       callback_data: "homeBtn",
     },
   ],
@@ -43,19 +43,19 @@ export const pet_inline_keyboard = [
 export const nopet_inline_keyboard = [
   [
     {
-      text: "Песики \u{1F436}",
+      text: "Песики "+emojis_obj.dog,
       callback_data: "dogsBtn",
     },
   ],
   [
     {
-      text: "Котики \u{1F431}",
+      text: "Котики "+emojis_obj.cat,
       callback_data: "catsBtn",
     },
   ],
   [
     {
-      text: "На головну \u{1F3E0}",
+      text: "На головну "+emojis_obj.home,
       callback_data: "homeBtn",
     },
   ],
@@ -65,25 +65,25 @@ export const donate_inline_keyboard = [
   [
     {
       text: "50 UAH \u{1F49C}",
-      callback_data: "50UAHBtn",
+      callback_data: "money50UAHBtn",
     },
   ],
   [
     {
       text: "100 UAH \u{1F49C}",
-      callback_data: "100UAHBtn",
+      callback_data: "money100UAHBtn",
     },
   ],
   [
     {
       text: "250 UAH \u{1F49C}",
-      callback_data: "250UAHBtn",
+      callback_data: "money250UAHBtn",
     },
   ],
   [
     {
       text: "500 UAH \u{1F49C}",
-      callback_data: "500UAHBtn",
+      callback_data: "money500UAHBtn",
     },
   ],
   [
@@ -116,7 +116,7 @@ export const dogs_inline_keyboard = [
   ...createBtn("d"),
   [
     {
-      text: "На головну \u{1F3E0}",
+      text: "На головну "+emojis_obj.home,
       callback_data: "homeBtn",
     },
   ],
@@ -126,7 +126,7 @@ export const cats_inline_keyboard = [
   ...createBtn("c"),
   [
     {
-      text: "На головну \u{1F3E0}",
+      text: "На головну "+emojis_obj.home,
       callback_data: "homeBtn",
     },
   ],

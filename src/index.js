@@ -142,9 +142,10 @@ for (const q in questions) {
 
 bot.use(Telegraf.log());
 
-bot.action("50UAHBtn", async (ctx) => {
-  return ctx.replyWithInvoice(getInvoice(ctx.from.id, 50));
-});
+bot.action(/money[0-9]+[a-zA-Z]+/, async(ctx)=>{
+  return ctx.replyWithInvoice(getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/))))
+})
+
 
 bot.help((ctx) => ctx.reply("Not ready yet :("));
 bot.launch();
