@@ -1,6 +1,6 @@
 import { createBtn } from "./dynamic.js";
 import { emojis_obj } from "./emojis.js";
-export const home_inline_keyboard = [
+const home_inline_keyboard = [
   [
     {
       text: "Є улюбленець "+emojis_obj.withPet,
@@ -19,7 +19,7 @@ export const home_inline_keyboard = [
   ],
 ];
 
-export const pet_inline_keyboard = [
+const pet_inline_keyboard = [
   [
     {
       text: "Песики "+emojis_obj.dog,
@@ -40,7 +40,7 @@ export const pet_inline_keyboard = [
   ],
 ];
 
-export const nopet_inline_keyboard = [
+const nopet_inline_keyboard = [
   [
     {
       text: "Песики "+emojis_obj.dog,
@@ -61,7 +61,7 @@ export const nopet_inline_keyboard = [
   ],
 ];
 
-export const donate_inline_keyboard = [
+const donate_inline_keyboard = [
   [
     {
       text: "50 UAH \u{1F49C}",
@@ -94,7 +94,7 @@ export const donate_inline_keyboard = [
   ],
 ];
 
-export const dogs_back_inline_keyboard = [
+const dogs_back_inline_keyboard = [
   [
     {
       text: "Назад \u{1F436}",
@@ -103,7 +103,7 @@ export const dogs_back_inline_keyboard = [
   ],
 ];
 
-export const cats_back_inline_keyboard = [
+const cats_back_inline_keyboard = [
   [
     {
       text: "Назад \u{1F431}",
@@ -112,7 +112,7 @@ export const cats_back_inline_keyboard = [
   ],
 ];
 
-export const dogs_inline_keyboard = [
+const dogs_inline_keyboard = [
   ...createBtn("d"),
   [
     {
@@ -122,7 +122,7 @@ export const dogs_inline_keyboard = [
   ],
 ];
 
-export const cats_inline_keyboard = [
+const cats_inline_keyboard = [
   ...createBtn("c"),
   [
     {
@@ -131,3 +131,14 @@ export const cats_inline_keyboard = [
     },
   ],
 ];
+
+export const buttons = {
+  home_inline_keyboard,
+  pet_inline_keyboard,
+  nopet_inline_keyboard,
+  cats_inline_keyboard,
+  cats_back_inline_keyboard,
+  dogs_inline_keyboard,
+  dogs_back_inline_keyboard,
+  donate_inline_keyboard
+};
