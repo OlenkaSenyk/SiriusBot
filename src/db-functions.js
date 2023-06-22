@@ -13,7 +13,7 @@ async function getAllQuestions() {
 
 async function getAnswer(title) {
   try {
-    const doc = await questionsCollection.findOne({title: title});
+    const doc = await questionsCollection.findOne({ title: title });
     return doc ? doc.answer : null;
   } catch (err) {
     console.log("getAnswer", err);
