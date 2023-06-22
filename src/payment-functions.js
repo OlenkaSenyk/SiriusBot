@@ -1,4 +1,4 @@
-export const getInvoice = (id, amount) => {
+const getInvoice = (id, amount) => {
   return {
     chat_id: id,
     provider_token: process.env.PROVIDER_TOKEN,
@@ -13,3 +13,5 @@ export const getInvoice = (id, amount) => {
     },
   };
 };
+
+export { getInvoice }

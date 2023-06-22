@@ -1,5 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { config } from "dotenv";
+
 config();
 
 const client = new MongoClient(process.env.DB_URI, {
@@ -13,8 +14,6 @@ const client = new MongoClient(process.env.DB_URI, {
 const connect = async () => {
   try {
     await client.connect();
-    console.log("Successfully connected!");
-
     return client.db(process.env.DB_NAME);
   } catch (error) {
     console.error("Connection to MongoDB Atlas failed!", error);
@@ -24,7 +23,6 @@ const connect = async () => {
 const close = async () => {
   try {
     await client.close();
-
     console.log("Connection closed!");
   } catch (err) {
     console.error("Connection closed error: ", err);
