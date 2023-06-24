@@ -1,13 +1,14 @@
-import { generateButton } from "../buttons/generate-button";
+import { generateButton } from "../buttons/generate-button.js";
+import { Markup } from "telegraf";
 async function getPetsInfo(ctx, array) {
-  array.forEach(async (element) => {
-    await ctx.replyWithPhoto({
-      source: element.image,
-    });
+    array.forEach(async (element) => {
+    // await ctx.replyWithPhoto({
+    //   source: element.image,
+    // });
     let text = "";
-    for (const property of element) {
+    for (const property in element) {
       if (property != "image") {
-        text += element.property + "\n";
+        text += element[property] + "\n";
       }
     }
     await ctx.replyWithHTML(
