@@ -1,3 +1,4 @@
+import { generateButton } from "../buttons/generate-button";
 async function getPetsInfo(array){
     array.forEach(async element => {
         await ctx.replyWithPhoto({
@@ -11,9 +12,14 @@ async function getPetsInfo(array){
         }
         await ctx.replyWithHTML(
             text,
-            {
-              disable_web_page_preview: true,
-            }
+            Markup.inlineKeyboard(await generateButton([
+                {
+                  text: "На головну ",
+                  callback_data: "homeBtn&home",
+                },
+              ]))
           );        
-    })
+    })  
 }
+
+export {getPetsInfo}
