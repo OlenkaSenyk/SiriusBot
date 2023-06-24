@@ -39,6 +39,7 @@ bot.start(async (ctx) => {
 
 bot.action(/homeBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
+    await console.log(ctx.inlineQuery)
     await botCommand(
       ctx,
       "Наші послуги",
@@ -150,7 +151,7 @@ bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
       "Обирай вік друга або подруги" + emojis_obj.heart,
       await generateButton([
         { text: "До 1 року ", callback_data: "under1yBtn&heart" },
-        { text: "1-5 років ", callback_data: "1-5y&heart" },
+        { text: "1-5 років ", callback_data: "bet1-5y&heart" },
         { text: "5 і більше років ", callback_data: "more5y&heart" },
         { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
