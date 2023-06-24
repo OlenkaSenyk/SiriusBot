@@ -151,8 +151,8 @@ bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
       "Обирай вік друга або подруги" + emojis_obj.heart,
       await generateButton([
         { text: "До 1 року ", callback_data: "under1yBtn&heart" },
-        { text: "1-5 років ", callback_data: "bet1-5y&heart" },
-        { text: "5 і більше років ", callback_data: "more5y&heart" },
+        { text: "1-5 років ", callback_data: "bet1-5yBtn&heart" },
+        { text: "5 і більше років ", callback_data: "more5yBtn&heart" },
         { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
@@ -162,7 +162,7 @@ bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
   }
 });
 
-bot.action(/[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
+bot.action(/[a-zA-Z]+[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     await botCommand(
       ctx,
@@ -200,7 +200,7 @@ bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
 
 bot.action(/^(d|c).+/, answer);
 
-bot.action(/[0-9]+[a-zA-Z]+/, async (ctx) => {
+bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
   return ctx.replyWithInvoice(
     getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/)))
   );
