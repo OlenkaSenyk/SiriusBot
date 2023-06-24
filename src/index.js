@@ -6,6 +6,8 @@ import { createBtn } from "./buttons/dynamic.js";
 import { botCommand } from "./bot-command.js";
 import { answer } from "./db/db-reply.js";
 import { generateButton } from "./buttons/generate-button.js";
+import { getPets } from "./db/db-functions.js";
+import { getPetsInfo } from "./db/db-images.js";
 
 config();
 
@@ -13,6 +15,8 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 global.main_msg, global.start_msg;
 global.start_msg_cnt = true;
 global.start = true;
+
+let kind, sex, age, size;
 
 bot.start(async (ctx) => {
   try {
@@ -39,7 +43,6 @@ bot.start(async (ctx) => {
 
 bot.action(/homeBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
-    await console.log(ctx.inlineQuery)
     await botCommand(
       ctx,
       "Наші послуги",
@@ -129,13 +132,18 @@ bot.action(/withoutPetBtn(&[a-zA-Z]+)?/, async (ctx) => {
 
 bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
+    if (ctx.match[0].includes("dog")) {
+      kind = "песик";
+    } else {
+      kind = "котик";
+    }
     await botCommand(
       ctx,
       "Обирай друга або подругу " + emojis_obj.heart,
       await generateButton([
         { text: "Дівчинка ", callback_data: "girlBtn&girl" },
         { text: "Хлопчик ", callback_data: "boyBtn&boy" },
-        { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
+        { text: "Не грає ролі ", callback_data: "nosexBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
@@ -144,8 +152,15 @@ bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
   }
 });
 
-bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
+bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
+    if (ctx.match[0].includes("boy")) {
+      sex = "хлопчик";
+    } else if (ctx.match[0].includes("girl")) {
+      sex = "дівчинка";
+    } else {
+      sex = "";
+    }
     await botCommand(
       ctx,
       "Обирай вік друга або подруги" + emojis_obj.heart,
@@ -153,7 +168,7 @@ bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
         { text: "До 1 року ", callback_data: "under1yBtn&heart" },
         { text: "1-5 років ", callback_data: "bet1-5yBtn&heart" },
         { text: "5 і більше років ", callback_data: "more5yBtn&heart" },
-        { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
+        { text: "Не грає ролі ", callback_data: "noage0yBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
@@ -164,17 +179,47 @@ bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
 
 bot.action(/[a-zA-Z]+[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
+    age = "";
     await botCommand(
       ctx,
       "Обирай розмір друга або подруги" + emojis_obj.heart,
       await generateButton([
         { text: "Маленький ", callback_data: "smallBtn&heart" },
-        { text: "Середній ", callback_data: "middle&heart" },
-        { text: "Великий ", callback_data: "big&heart" },
-        { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
+        { text: "Середній ", callback_data: "middleBtn&heart" },
+        { text: "Великий ", callback_data: "bigBtn&heart" },
+        { text: "Не грає ролі ", callback_data: "nosizeBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+bot.action(/(small|middle|big|nosize)Btn&heart/, async (ctx) => {
+  try {
+    if (ctx.match[0].includes("small")) {
+      size = "маленький";
+    } else if (ctx.match[0].includes("middle")) {
+      size = "середній";
+    } else if (ctx.match[0].includes("big")) {
+      size = "великий";
+    } else {
+      size = "";
+    }
+
+    const pets = await getPets(kind, sex, age, size);
+    console.log(pets);
+
+    await getPetsInfo(ctx, pets);
+
+    // await botCommand(
+    //   ctx,
+    //   "Обирай вік друга або подруги" + emojis_obj.heart,
+    //   await generateButton([
+    //     { text: "На головну ", callback_data: "homeBtn&home" },
+    //   ])
+    // );
   } catch (e) {
     console.error(e);
   }
