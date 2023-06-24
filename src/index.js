@@ -15,6 +15,7 @@ global.start=true;
 
 bot.start(async (ctx) => {
   try {
+    global.start=true;
     await botCommand(ctx, "Наші послуги",await generateButton([[{text:"Є улюбленець ", callback_data:"withPetBtn&withPet"},{text:"Нема улюбленця ", callback_data:"withoutPetBtn&withoutPet"}],{text:"Донати ", callback_data:"donateBtn&donate"}]));
   } catch (e) {
     console.error(e);
@@ -78,12 +79,37 @@ bot.action(/withoutPetBtn(&[a-zA-Z]+)?/, async (ctx) => {
     await botCommand(
       ctx,
       "Кого б ви хотіли придбати? "+emojis_obj.rainbow,
-      await generateButton([{text: "Песики ",callback_data: "dogsBtn&dog"},{text: "Котики ",callback_data: "catsBtn&cat",},{text: "На головну ",callback_data: "homeBtn&home",}])
+      await generateButton([{text: "Песики ",callback_data: "takeBtn&dog"},{text: "Котики ",callback_data: "takeBtn&cat",},{text: "На головну ",callback_data: "homeBtn&home",}])
     );
   } catch (e) {
     console.error(e);
   }
 });
+
+bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
+  try {
+    await botCommand(
+      ctx,
+      "Обирай друга або подругу "+emojis_obj.heart,
+      await generateButton([{text:'Дівчинка ', callback_data:'girlBtn&girl'},{text:'Хлопчик ', callback_data:'boyBtn&boy'},{text:'Не грає ролі ', callback_data:'noDiffBtn&nodiff'},{text:'На головну ', callback_data:'homeBtn&home'}])
+    );
+  } catch (e) {
+    console.error(e);
+  }
+})
+
+
+bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
+  try {
+    await botCommand(
+      ctx,
+      "Обирай вік друга або подруги"+emojis_obj.heart,
+      await generateButton([{text:'Дівчинка ', callback_data:'girlBtn&girl'},{text:'Хлопчик ', callback_data:'boyBtn&boy'},{text:'Не грає ролі ', callback_data:'noDiffBtn&nodiff'},{text:'На головну ', callback_data:'homeBtn&home'}])
+    );
+  } catch (e) {
+    console.error(e);
+  }
+})
 
 bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {

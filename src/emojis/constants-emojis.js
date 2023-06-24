@@ -9,5 +9,8 @@ export const emojis_obj={
     sum:'\u{1F308}',
     smile:'\u{1F60A}',
     question:'\u{2753}',
-    rainbow:'\u{1F308}'
+    rainbow:'\u{1F308}',
+    girl:'\u{1F467}',
+    boy:'\u{1F466}',
+    nodiff:'\u{274E}'
 }
