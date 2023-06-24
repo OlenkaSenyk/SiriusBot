@@ -14,4 +14,4 @@ const getInvoice = (id, amount) => {
   };
 };
 
-export { getInvoice }
+export { getInvoice };

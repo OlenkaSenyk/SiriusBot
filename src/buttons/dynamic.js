@@ -10,7 +10,7 @@ function createBtn(find) {
     if (question.title.includes(find)) {
       const button = {
         text: question.question,
-        callback_data: question.title+'&question',
+        callback_data: question.title + "&question",
       };
 
       pets_btn.push(button);
