@@ -2,30 +2,33 @@ import { generateButton } from "../buttons/generate-button.js";
 import { Markup } from "telegraf";
 import { emojis_obj } from "../emojis/constants-emojis.js";
 async function getPetsInfo(ctx, array) {
-    array.forEach(async (element) => {
+    for (let i=0; i<array.length; i++){
     await ctx.replyWithPhoto({
-      url: element["img"],
+      url: array[i]["img"],
     });
     let text = "";
-    for (const property in element) {
+    for (const property in array[i]) {
       if(property!=="img"&&property!=="url"&&property!=="_id"){
-        text += element[property] +" "+emojis_obj.gheart+ "\n";
+        text += array[i][property] +" "+emojis_obj.gheart+ "\n";
       }
     }
-    global.start = true;
-    global.start_msg_cnt=false;
     await ctx.replyWithHTML(
       text,
-      Markup.inlineKeyboard(
-        await generateButton([
-          {
-            text: "На головну ",
-            callback_data: "homeBtn&home",
-          },
-        ])
-      )
-    );
-  });
+      Markup.inlineKeyboard([Markup.button.url("Перейти на сторінку "+emojis_obj.rainbow, array[i]["url"])])
+    )
+  };
+  await ctx.replyWithHTML(
+    'Come back',
+    Markup.inlineKeyboard(
+      await generateButton([
+        {
+          text: "Повернутись ",
+          callback_data: "homeBtn&home",
+        },
+      ])
+    ))
+  global.start = true;
+  global.start_msg_cnt=false;
 }
 
 export { getPetsInfo };
