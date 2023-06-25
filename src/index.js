@@ -4,19 +4,17 @@ import { getInvoice } from "./payment-functions.js";
 import { emojis_obj } from "./emojis/constants-emojis.js";
 import { createBtn } from "./buttons/dynamic.js";
 import { botCommand } from "./bot-command.js";
-import { answer } from "./db/db-reply.js";
 import { generateButton } from "./buttons/generate-button.js";
 import { getPets } from "./db/db-functions.js";
 import { getPetsInfo } from "./db/db-images.js";
-
+import { answer } from "./db/db-reply.js";
 config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 global.main_msg, global.start_msg;
 global.start_msg_cnt = true;
 global.start = true;
-
-let kind, sex, age, size;
+let kind="", sex="", age="", size="";
 
 bot.start(async (ctx) => {
   try {
@@ -78,6 +76,22 @@ bot.action(/withPetBtn(&[a-zA-Z]+)?/, async (ctx) => {
   }
 });
 
+bot.action(/withoutPetBtn(&[a-zA-Z]+)?/, async (ctx) => {
+  try {
+    await botCommand(
+      ctx,
+      "Кого б ви хотіли придбати? " + emojis_obj.rainbow,
+      await generateButton([
+        { text: "Песики ", callback_data: "takeBtn&dog" },
+        { text: "Котики ", callback_data: "takeBtn&cat" },
+        { text: "На головну ", callback_data: "homeBtn&home" },
+      ])
+    );
+  } catch (e) {
+    console.error(e);
+  }
+});
+
 bot.action(/dogsBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     await botCommand(
@@ -114,22 +128,6 @@ bot.action(/catsBtn(&[a-zA-Z]+)?/, async (ctx) => {
   }
 });
 
-bot.action(/withoutPetBtn(&[a-zA-Z]+)?/, async (ctx) => {
-  try {
-    await botCommand(
-      ctx,
-      "Кого б ви хотіли придбати? " + emojis_obj.rainbow,
-      await generateButton([
-        { text: "Песики ", callback_data: "takeBtn&dog" },
-        { text: "Котики ", callback_data: "takeBtn&cat" },
-        { text: "На головну ", callback_data: "homeBtn&home" },
-      ])
-    );
-  } catch (e) {
-    console.error(e);
-  }
-});
-
 bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     if (ctx.match[0].includes("dog")) {
@@ -147,12 +145,13 @@ bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
-  } catch (e) {
-    console.error(e);
+  }catch (e) {
+  console.error(e);
   }
-});
+}
+)
 
-bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
+bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     if (ctx.match[0].includes("boy")) {
       sex = "хлопчик";
@@ -161,6 +160,7 @@ bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
     } else {
       sex = "";
     }
+    
     await botCommand(
       ctx,
       "Обирай вік друга або подруги" + emojis_obj.heart,
@@ -168,7 +168,7 @@ bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
         { text: "До 1 року ", callback_data: "under1yBtn&heart" },
         { text: "1-5 років ", callback_data: "bet1-5yBtn&heart" },
         { text: "5 і більше років ", callback_data: "more5yBtn&heart" },
-        { text: "Не грає ролі ", callback_data: "noage0yBtn&nodiff" },
+        { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
@@ -179,7 +179,6 @@ bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
 
 bot.action(/[a-zA-Z]+[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
-    age = "";
     await botCommand(
       ctx,
       "Обирай розмір друга або подруги" + emojis_obj.heart,
@@ -207,9 +206,10 @@ bot.action(/(small|middle|big|nosize)Btn&heart/, async (ctx) => {
     } else {
       size = "";
     }
+    await console.log(kind, sex, age, size);
 
     const pets = await getPets(kind, sex, age, size);
-    console.log(pets);
+    await console.log(pets);
 
     await getPetsInfo(ctx, pets);
 
@@ -224,7 +224,6 @@ bot.action(/(small|middle|big|nosize)Btn&heart/, async (ctx) => {
     console.error(e);
   }
 });
-
 bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     await botCommand(
@@ -251,7 +250,10 @@ bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
   );
 });
 
-bot.help((ctx) => ctx.reply("/start - розпочати роботу\n/help - допомога"));
+bot.help(async (ctx) => {
+  ctx.reply("/start - розпочати роботу\n/help - допомога")
+}
+);
 bot.launch();
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
