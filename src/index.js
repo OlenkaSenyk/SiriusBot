@@ -151,7 +151,7 @@ bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
 }
 )
 
-bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
+bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     if (ctx.match[0].includes("boy")) {
       sex = "хлопчик";
@@ -160,15 +160,15 @@ bot.action(/(girl|boy)Btn(&[a-zA-Z]+)?/, async (ctx) => {
     } else {
       sex = "";
     }
-    
+
     await botCommand(
       ctx,
-      "Обирай вік друга або подруги" + emojis_obj.heart,
+      "Обирай вік друга або подруги " + emojis_obj.heart,
       await generateButton([
         { text: "До 1 року ", callback_data: "under1yBtn&heart" },
         { text: "1-5 років ", callback_data: "bet1-5yBtn&heart" },
         { text: "5 і більше років ", callback_data: "more5yBtn&heart" },
-        { text: "Не грає ролі ", callback_data: "noDiffBtn&nodiff" },
+        { text: "Не грає ролі ", callback_data: "age0yBtn&nodiff" },
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
@@ -181,7 +181,7 @@ bot.action(/[a-zA-Z]+[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     await botCommand(
       ctx,
-      "Обирай розмір друга або подруги" + emojis_obj.heart,
+      "Обирай розмір друга або подруги " + emojis_obj.heart,
       await generateButton([
         { text: "Маленький ", callback_data: "smallBtn&heart" },
         { text: "Середній ", callback_data: "middleBtn&heart" },
@@ -195,7 +195,7 @@ bot.action(/[a-zA-Z]+[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
   }
 });
 
-bot.action(/(small|middle|big|nosize)Btn&heart/, async (ctx) => {
+bot.action(/(small|middle|big|nosize)Btn&(heart|nodiff)/, async (ctx) => {
   try {
     if (ctx.match[0].includes("small")) {
       size = "маленький";
@@ -206,6 +206,7 @@ bot.action(/(small|middle|big|nosize)Btn&heart/, async (ctx) => {
     } else {
       size = "";
     }
+
     await console.log(kind, sex, age, size);
 
     const pets = await getPets(kind, sex, age, size);
@@ -224,6 +225,7 @@ bot.action(/(small|middle|big|nosize)Btn&heart/, async (ctx) => {
     console.error(e);
   }
 });
+
 bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     await botCommand(
@@ -245,6 +247,7 @@ bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
 bot.action(/^(d|c).+/, answer);
 
 bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
+  await console.log(ctx.match.input.match(/[0-9]+/).toString())
   return ctx.replyWithInvoice(
     getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/)))
   );

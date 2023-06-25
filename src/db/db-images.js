@@ -3,9 +3,11 @@ import { Markup } from "telegraf";
 import { emojis_obj } from "../emojis/constants-emojis.js";
 async function getPetsInfo(ctx, array) {
     for (let i=0; i<array.length; i++){
-    await ctx.replyWithPhoto({
-      url: array[i]["img"],
-    });
+    if(array[i]["img"]){
+      await ctx.replyWithPhoto({
+        url: array[i]["img"],
+      });
+    }
     let text = "";
     for (const property in array[i]) {
       if(property!=="img"&&property!=="url"&&property!=="_id"){
@@ -18,11 +20,11 @@ async function getPetsInfo(ctx, array) {
     )
   };
   await ctx.replyWithHTML(
-    'Come back',
+    array.length? "Повернутись":"На жаль, нікого не знайдено "+"\nСпробуйте змінити фільтри "+emojis_obj.gheart,
     Markup.inlineKeyboard(
       await generateButton([
         {
-          text: "Повернутись ",
+          text: "На головну ",
           callback_data: "homeBtn&home",
         },
       ])
