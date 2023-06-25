@@ -14,12 +14,14 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 global.main_msg, global.start_msg;
 global.start_msg_cnt = true;
 global.start = true;
+global.start_index=0;
 let kind="", sex="", age="", size="";
 
 bot.start(async (ctx) => {
   try {
     global.start = true;
     global.start_msg_cnt = true;
+    global.start_index=0;
     await botCommand(
       ctx,
       "Наші послуги",
@@ -206,13 +208,12 @@ bot.action(/(small|middle|big|nosize)Btn&(heart|nodiff)/, async (ctx) => {
     } else {
       size = "";
     }
-
+    global.start_index=0;
     await console.log(kind, sex, age, size);
-
     const pets = await getPets(kind, sex, age, size);
     await console.log(pets);
 
-    await getPetsInfo(ctx, pets);
+    await getPetsInfo(ctx, pets,global.start_index);
 
     // await botCommand(
     //   ctx,
@@ -251,6 +252,13 @@ bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
   return ctx.replyWithInvoice(
     getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/)))
   );
+});
+
+bot.action(/showBtn(&[a-zA-Z]+)?/, async (ctx) => {
+  const pets = await getPets(kind, sex, age, size);
+  await console.log(pets);
+  await getPetsInfo(ctx, pets,global.start_index);
+
 });
 
 bot.help(async (ctx) => {

@@ -1,6 +1,6 @@
 import { Markup } from "telegraf";
 import { emojis_obj } from "./emojis/constants-emojis.js";
-async function botCommand(ctx, text, inline_keyboard, start) {
+async function botCommand(ctx, text, inline_keyboard) {
     if(global.start){
       await ctx.replyWithPhoto({
         source: "poster.jpg",
@@ -23,6 +23,7 @@ async function botCommand(ctx, text, inline_keyboard, start) {
         await ctx.telegram.deleteMessage(ctx.chat.id, global.start_msg.message_id);
         global.start_msg_cnt = false;
       }
+      await console.log(global.main_msg)
       global.main_msg = await ctx.telegram.editMessageText(
         ctx.chat.id,
         global.main_msg.message_id,

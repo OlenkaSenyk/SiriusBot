@@ -13,5 +13,6 @@ export const emojis_obj = {
   girl: "\u{1F467}",
   boy: "\u{1F466}",
   nodiff: "\u{274E}",
-  gheart:"\u{1F49A}"
+  gheart:"\u{1F49A}",
+  show:"\u{23ED}"
 };
