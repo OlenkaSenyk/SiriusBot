@@ -1,4 +1,4 @@
-import { Markup, Telegraf } from "telegraf";
+import { Telegraf } from "telegraf";
 import { config } from "dotenv";
 import { botCommand } from "./bot/bot-command.js";
 import {
@@ -90,7 +90,7 @@ bot.action(/withoutPetBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
     await botCommand(
       ctx,
-      "Кого б ви хотіли придбати? " + emojis_obj.rainbow,
+      "Знайдіть собі друга " + emojis_obj.rainbow,
       await generateButton([
         { text: "Песики ", callback_data: "takeBtn&dog" },
         { text: "Котики ", callback_data: "takeBtn&cat" },
