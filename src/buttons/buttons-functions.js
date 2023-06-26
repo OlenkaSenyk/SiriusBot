@@ -1,4 +1,25 @@
+import { getAllQuestions } from "../db/db-functions.js";
 import { emojis_obj } from "../emojis/constants-emojis.js";
+
+const questions = await getAllQuestions();
+
+function generateQuestionsArray(find) {
+  let pets_btn = [];
+
+  questions.forEach((question) => {
+    if (question.title.includes(find)) {
+      const button = {
+        text: question.question,
+        callback_data: question.title + "&question",
+      };
+
+      pets_btn.push(button);
+    }
+  });
+
+  return pets_btn;
+}
+
 async function generateButton(array) {
   let inline_keyboard = [];
   let nested_inline = [];
@@ -30,8 +51,8 @@ async function generateButton(array) {
 
     nested_inline = [];
   }
-  // console.log(inline_keyboard);
+
   return inline_keyboard;
 }
 
-export { generateButton };
+export { generateQuestionsArray, generateButton };

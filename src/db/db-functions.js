@@ -1,4 +1,4 @@
-import { connect, close } from "./db-connection.js";
+import { connect } from "./db-connection.js";
 
 const db = await connect();
 const questionsCollection = db.collection("questions");

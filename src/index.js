@@ -1,27 +1,34 @@
 import { Telegraf } from "telegraf";
 import { config } from "dotenv";
-import { getInvoice } from "./payment-functions.js";
+import { botCommand } from "./bot/bot-command.js";
+import {
+  generateButton,
+  generateQuestionsArray,
+} from "./buttons/buttons-functions.js";
 import { emojis_obj } from "./emojis/constants-emojis.js";
-import { createBtn } from "./buttons/dynamic.js";
-import { botCommand } from "./bot-command.js";
-import { generateButton } from "./buttons/generate-button.js";
 import { getPets } from "./db/db-functions.js";
-import { getPetsInfo } from "./db/db-images.js";
-import { answer } from "./db/db-reply.js";
+import { setAnswer, setPetsInfo } from "./db/db-reply.js";
+import { getInvoice } from "./bot/payment-functions.js";
+
 config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
 global.main_msg, global.start_msg;
 global.start_msg_cnt = true;
 global.start = true;
-global.start_index=0;
-let kind="", sex="", age="", size="";
+global.start_index = 0;
+
+let kind = "",
+  sex = "",
+  age = "",
+  size = "";
 
 bot.start(async (ctx) => {
   try {
     global.start = true;
     global.start_msg_cnt = true;
-    global.start_index=0;
+    global.start_index = 0;
     await botCommand(
       ctx,
       "Наші послуги",
@@ -100,7 +107,7 @@ bot.action(/dogsBtn(&[a-zA-Z]+)?/, async (ctx) => {
       ctx,
       "Популярні питання про песиків " + emojis_obj.dog,
       await generateButton([
-        ...createBtn("d"),
+        ...generateQuestionsArray("d"),
         {
           text: "На головну ",
           callback_data: "homeBtn&home",
@@ -118,7 +125,7 @@ bot.action(/catsBtn(&[a-zA-Z]+)?/, async (ctx) => {
       ctx,
       "Популярні питання про котиків " + emojis_obj.cat,
       await generateButton([
-        ...createBtn("c"),
+        ...generateQuestionsArray("c"),
         {
           text: "На головну ",
           callback_data: "homeBtn&home",
@@ -147,11 +154,10 @@ bot.action(/takeBtn(&[a-zA-Z]+)?/, async (ctx) => {
         { text: "На головну ", callback_data: "homeBtn&home" },
       ])
     );
-  }catch (e) {
-  console.error(e);
+  } catch (e) {
+    console.error(e);
   }
-}
-)
+});
 
 bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
@@ -181,6 +187,15 @@ bot.action(/(girl|boy|nosex)Btn(&[a-zA-Z]+)?/, async (ctx) => {
 
 bot.action(/[a-zA-Z]+[0-9]-?[0-9]?yBtn(&[a-zA-Z]+)?/, async (ctx) => {
   try {
+    if (ctx.match[0].includes("under1y")) {
+      age = "міс";
+    } else if (ctx.match[0].includes("bet1-5y")) {
+      age = /[1-4] р/;
+    } else if (ctx.match[0].includes("more5y")) {
+      age = "років";
+    } else {
+      age = "";
+    }
     await botCommand(
       ctx,
       "Обирай розмір друга або подруги " + emojis_obj.heart,
@@ -208,20 +223,12 @@ bot.action(/(small|middle|big|nosize)Btn&(heart|nodiff)/, async (ctx) => {
     } else {
       size = "";
     }
-    global.start_index=0;
-    await console.log(kind, sex, age, size);
+    global.start_index = 0;
+
     const pets = await getPets(kind, sex, age, size);
-    await console.log(pets);
+    // await console.log(pets);
 
-    await getPetsInfo(ctx, pets,global.start_index);
-
-    // await botCommand(
-    //   ctx,
-    //   "Обирай вік друга або подруги" + emojis_obj.heart,
-    //   await generateButton([
-    //     { text: "На головну ", callback_data: "homeBtn&home" },
-    //   ])
-    // );
+    await setPetsInfo(ctx, pets, global.start_index);
   } catch (e) {
     console.error(e);
   }
@@ -245,10 +252,10 @@ bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
   }
 });
 
-bot.action(/^(d|c).+/, answer);
+bot.action(/^(d|c).+/, setAnswer);
 
 bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
-  await console.log(ctx.match.input.match(/[0-9]+/).toString())
+  await console.log(ctx.match.input.match(/[0-9]+/).toString());
   return ctx.replyWithInvoice(
     getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/)))
   );
@@ -256,15 +263,12 @@ bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
 
 bot.action(/showBtn(&[a-zA-Z]+)?/, async (ctx) => {
   const pets = await getPets(kind, sex, age, size);
-  await console.log(pets);
-  await getPetsInfo(ctx, pets,global.start_index);
-
+  await setPetsInfo(ctx, pets, global.start_index);
 });
 
 bot.help(async (ctx) => {
-  ctx.reply("/start - розпочати роботу\n/help - допомога")
-}
-);
+  ctx.reply("/start - розпочати роботу\n/help - допомога");
+});
 bot.launch();
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
