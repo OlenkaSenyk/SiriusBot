@@ -1,4 +1,4 @@
-import {Markup, Telegraf} from "telegraf";
+import { Markup, Telegraf } from "telegraf";
 import { config } from "dotenv";
 import { botCommand } from "./bot/bot-command.js";
 import {
@@ -29,6 +29,7 @@ bot.start(async (ctx) => {
     global.start = true;
     global.start_msg_cnt = true;
     global.start_index = 0;
+
     await botCommand(
       ctx,
       "Наші послуги",
@@ -255,11 +256,9 @@ bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
 bot.action(/^(d|c).+/, setAnswer);
 
 bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
-  const replyMarkup = Markup.inlineKeyboard([{ text: "На головну ", callback_data: "homeBtn&home" }]);
   // await console.log(ctx.match.input.match(/[0-9]+/).toString());
   return ctx.replyWithInvoice(
-    getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/))),
-    replyMarkup
+    getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/)))
   );
 });
 
