@@ -1,4 +1,4 @@
-import { Telegraf } from "telegraf";
+import {Markup, Telegraf} from "telegraf";
 import { config } from "dotenv";
 import { botCommand } from "./bot/bot-command.js";
 import {
@@ -255,9 +255,11 @@ bot.action(/donateBtn(&[a-zA-Z]+)?/, async (ctx) => {
 bot.action(/^(d|c).+/, setAnswer);
 
 bot.action(/^[0-9]+[a-zA-Z]+/, async (ctx) => {
-  await console.log(ctx.match.input.match(/[0-9]+/).toString());
+  const replyMarkup = Markup.inlineKeyboard([{ text: "На головну ", callback_data: "homeBtn&home" }]);
+  // await console.log(ctx.match.input.match(/[0-9]+/).toString());
   return ctx.replyWithInvoice(
-    getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/)))
+    getInvoice(ctx.from.id, parseInt(ctx.match.input.match(/[0-9]+/))),
+    replyMarkup
   );
 });
 
@@ -269,6 +271,7 @@ bot.action(/showBtn(&[a-zA-Z]+)?/, async (ctx) => {
 bot.help(async (ctx) => {
   ctx.reply("/start - розпочати роботу\n/help - допомога");
 });
+
 bot.launch();
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
